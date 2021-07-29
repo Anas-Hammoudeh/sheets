@@ -310,6 +310,7 @@
 
 <script>
     function getReplies(ticket_id){
+        //
         $("#replyBody").empty();
         $.ajax({
             url:'{{route('getreplies')}}',
