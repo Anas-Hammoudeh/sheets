@@ -91,7 +91,13 @@
         }
         .notes:hover,.replys:hover{
             cursor: pointer;
-            background-color: rgba(255, 0, 0, 0.4);;
+            background-color: rgba(153, 153, 153, 0.4);
+        }
+        .openButton{
+            border: 1px solid grey;
+            padding: 5px 10px;
+            border-radius: 50px;
+            background-color: lightgrey;
         }
     </style>
 
@@ -99,7 +105,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="">
+<body>
 @if(session()->has('success'))
     <div class="alert alert-success tempAlert">
         {{ session()->get('success') }}
@@ -138,15 +144,15 @@
                     <td>{{$record->phone_no}}</td>
                     <td>{{$record->issue}}</td>
                     <td>{{$record->resp_emp}}</td>
-                    <td class="notes" onclick="showNotes('{{$record->notes}}')">فتح</td>
+                    <td class="notes" onclick="showNotes('{{$record->notes}}')"><div class="openButton">افتح</div></td>
                     <td class="statusColor">{{$record->status}}</td>
-                    <td class="replys" onclick="getReplies({{$record->id}})" >{{$record->notes2}}</td>
+                    <td class="replys" onclick="getReplies({{$record->id}})" ><div class="openButton">افتح</div></td>
                     <td>
                         <div style="display: flex">
-                            <button class="btn btn-info" onclick="edit(this,{{$record->id}})"><i
+                            <button class="btn btn-info" onclick="edit(this,{{$record->id}},'{{$record->notes}}')"><i
                                     class="material-icons">edit</i></button>
                             <!-- Button trigger modal -->
-                            <a id="transferAnchor" onclick="return confirm('Are you sure?')" href="{{url('delete'.'/'.$record->id.'/'.$record->resp_emp.'/'.$record->emp_name)}}" type="button" class="btn btn-danger" >
+                            <a id="transferAnchor" onclick="return confirm('هل انت متأكد؟')" href="{{url('delete'.'/'.$record->id.'/'.$record->resp_emp.'/'.$record->emp_name)}}" type="button" class="btn btn-danger" >
                                 <i class="material-icons">delete</i>
                             </a>
                         </div>
@@ -374,8 +380,7 @@ document.getElementById('getTicketId').setAttribute('value',ticket_id);
     targetpersonName = ["حسام", "ديمة", "شروق", "مجد"];
     statusInfo = ["تم الحل", "قيد المتابعة", "لا يوجد حل", "متابعة من الدعم الفني"];
 
-    function edit(e, id) {
-
+    function edit(e, id, notes) {
         tr = e.parentElement.parentElement.parentElement.children;
         rowd = document.getElementById(id).outerHTML;
 
@@ -429,12 +434,11 @@ document.getElementById('getTicketId').setAttribute('value',ticket_id);
             } else if (names[i] === "notes") {
                 html += ' <td> ' +
                     ' <textarea name="notes" form="form2" id="notes" class="form-control" ' +
-                    '  placeholder="ملاحظات">' + cont + '</textarea> ' +
+                    '  placeholder="ملاحظات">' + notes + '</textarea> ' +
                     '</td>';
             } else if (names[i] === "notes2") {
-                html += ' <td> ' +
-                    ' <textarea name="notes2" form="form2" id="notes2" class="form-control" ' +
-                    '  placeholder="2 ملاحظات">' + cont + '</textarea> ' +
+                html += '<td>' +
+                    '<input value="الردود" type="text" class="form-control smallInput" disabled>' +
                     '</td>';
             } else {
                 html += "<td><input form='form2' name=" + names[i] + " type='text' class='form-control' value='" + cont + "'></td>";
@@ -516,7 +520,7 @@ document.getElementById('getTicketId').setAttribute('value',ticket_id);
             } else {
                 /*If no switching has been done AND the direction is "asc",
                 set the direction to "desc" and run the while loop again.*/
-                if (switchcount == 0 && dir == "asc") {
+                if (switchcount === 0 && dir === "asc") {
                     dir = "desc";
                     switching = true;
                 }
