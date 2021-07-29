@@ -289,7 +289,7 @@
                         </div>
                         <div class="col-md-8">
                             <input class="form-control" form="replyForm" name="reply" id="newReply" placeholder="اكتب ردك" >
-                            <input name="ticket_id" value="{{$record->id}}" style="display: none">
+{{--                            <input name="ticket_id" value="{{$record->id}}" style="display: none">--}}
                         </div>
                         <div class="col-md-2">
                             <label for="newReply">اضافة رد</label>
@@ -310,6 +310,7 @@
 
 <script>
     function getReplies(ticket_id){
+        $("#replyBody").empty();
         $.ajax({
             url:'{{route('getreplies')}}',
             data:{'tik_id':ticket_id},
@@ -374,10 +375,8 @@ document.getElementById('getTicketId').setAttribute('value',ticket_id);
 
     function edit(e, id) {
 
-        trP = e.parentElement.parentElement.parentElement;
         tr = e.parentElement.parentElement.parentElement.children;
-        allData=e.parentElement.parentElement.parentElement.children;
-        alert($(id).length);
+        rowd = document.getElementById(id).outerHTML;
 
         names = ['id', 'date', 'employeeName', 'studentName', 'phone', 'problem', 'targetPerson', 'notes', 'status', 'notes2'];
         data = [];
@@ -442,42 +441,18 @@ document.getElementById('getTicketId').setAttribute('value',ticket_id);
             tr[i].remove();
             if (i == tr.length - 1)
                 tr[i].remove();
-            // alert(data);
         }
-        datee = $("#" + id + "").first().text().toString();
         idd = "#" + id + "";
-        // html += '<td><div style="display: flex"><button form="form2" type="submit" href="" class="btn btn-primary">موافق</button><button onclick="cancelEdit(idd,data,datee)" class="btn btn-default">الغاء</button></div></td>';
-        // $("#" + id + "").append(html);
-
-        html += '<td><div style="display: flex"><button form="form2" type="submit" href="" class="btn btn-primary">موافق</button><button onclick="cancelEdit(idd,allData)" class="btn btn-default">الغاء</button></div></td>';
+        html += '<td><div style="display: flex"><button form="form2" type="submit" href="" class="btn btn-primary">موافق</button><button onclick="cancelEdit(idd,rowd)" class="btn btn-default">الغاء</button></div></td>';
         $("#" + id + "").append(html);
     }
 
-    function cancelEdit(idd, allData) {
-
-        // function cancelEdit(id, data, datee) {
+    function cancelEdit(idd, oldData) {
         $(idd).empty();
-        alert(allData.length);
-        // for(i=1;i<allData.length;i++){}
-
-
-        // for (i = 0; i < data.length; i++) {
-        //
-        //     $(id).append('<td>' + data[i] + '</td>');
-        // }
-        // $(id).append(
-        //     '<td>' +
-        //     '<div style="display: flex">' +
-        //     '<button class="btn btn-info" onclick="edit(this,' + id.replace("#", "") + ')">' +
-        //     '<i class="material-icons">edit</i>' +
-        //     '</button>' +
-        //     '<button class="btn btn-danger">' +
-        //     '<i class="material-icons">delete</i>' +
-        //     '</button>' +
-        //     '</div>' +
-        //     '</td>'
-        // );
-
+        idd = idd.replace('#','');
+        oldData = oldData.replace('<tr id="'+idd+'">', '');
+        oldData = oldData.replace('</tr>', '');
+        $('#'+idd).append(oldData);
     }
 
     function submitAddForm(){
