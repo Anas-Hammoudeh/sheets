@@ -2,10 +2,19 @@
 
 namespace App\Http;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends HttpKernel
 {
+    protected $commands=[
+        \App\Console\Commands\DeleteSolvedCases::class,
+    ];
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('delete:solved')->everyMinute();
+    }
     /**
      * The application's global HTTP middleware stack.
      *

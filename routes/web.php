@@ -12,6 +12,10 @@ use App\Http\Controllers\TicketCont;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('all-logs','App\Http\Controllers\LogCont@getAllLogs');
+Route::get('logfile/{id}','App\Http\Controllers\LogCont@getTicketLog');
 Route::get('addreply','App\Http\Controllers\ReplyCont@add');
 Route::get('getreplies','App\Http\Controllers\ReplyCont@getReplies')->name('getreplies');
 Route::get('delete/{id}/{resp_emp}/{emp_name}','App\Http\Controllers\TicketCont@delete')->middleware('auth');

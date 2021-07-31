@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Reply;
 use App\Models\Ticket;
 use App\Models\User;
@@ -16,8 +17,8 @@ class TicketCont extends Controller
 
         $data = Ticket::select('*')->get();
         $currentUser = Auth::user()->name;
-        $replies = Reply::select('*')->get();
-        $arr['replies']=$replies;
+//        $replies = Reply::select('*')->get();
+//        $arr['replies']=$replies;
         $arr['data'] = $data;
         $arr['currentuser'] = $currentUser;
 
@@ -30,7 +31,7 @@ class TicketCont extends Controller
     public function insert(Request $request)
     {
 
-        Ticket::create(
+       $new_ticket= Ticket::create(
             ['emp_name' => $request->input('employeeName'),
                 'student_name' => $request->input('studentName'),
                 'phone_no' => $request->input('phone'),
@@ -44,6 +45,14 @@ class TicketCont extends Controller
             ]
 
         );
+        $new=  Ticket::select('student_name', 'phone_no', 'issue', 'resp_emp', 'notes', 'status')->where('id',$new_ticket->id )->get();
+
+        Log::create([
+           'ticket_id'=>$new_ticket->id,
+           'ticket_data'=>$new,
+            'modified_by'=>Auth::user()->name,
+            'description'=>'ادراج'
+        ]);
         return redirect()->back()->with('success', 'inserted');
 
     }
@@ -55,7 +64,16 @@ class TicketCont extends Controller
         $user_id = (Auth::user()->id);
 
         if ($user_id == (($resp_id != null) ? $resp_id->id : -1) || $user_id == (($emp_id != null) ? $emp_id->id : -1)) {
-            Ticket::find($id)->delete();
+
+            $ticket_data = Ticket::select('student_name', 'phone_no', 'issue', 'resp_emp', 'notes', 'status')->where('id', $id)->get();
+            Log::create([
+                'ticket_id' => $id,
+                'ticket_data' => $ticket_data,
+                'modified_by' => Auth::user()->name,
+                'description' => 'حذف',
+            ]);
+            $ticket = Ticket::find($id)->delete();
+
             return redirect()->back()->with('success', 'deleted');
         } else return redirect()->back()->with('failed', 'u cannot delete it');
 
@@ -71,6 +89,8 @@ class TicketCont extends Controller
 
 
         if ($user_id == (($resp_id != null) ? $resp_id->id : -1) || $user_id == (($emp_id != null) ? $emp_id->id : -1)) {
+
+
             $tick = Ticket::find($request->input('id'));
             $tick->student_name = $request->input('studentName');
             $tick->phone_no = $request->input('phone');
@@ -79,9 +99,19 @@ class TicketCont extends Controller
             $tick->notes = $request->input('notes');
             $tick->status = $request->input('status');
             $tick->notes2 = $request->input('notes2');
-
-
             $tick->save();
+            $ticket_data = Ticket::select('student_name', 'phone_no', 'issue', 'resp_emp', 'notes', 'status')->where('id', $request->input('id'))->get();
+
+
+            Log::create(
+                [
+                    'ticket_id' => $request->input('id'),
+                    'ticket_data' => $ticket_data,
+                    'modified_by' => Auth::user()->name,
+                    'description' => 'تعديل',
+
+                ]
+            );
             return redirect()->back()->with('success', 'edited successfully');
 
 
