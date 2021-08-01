@@ -25,9 +25,10 @@
     <script type="text/JavaScript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
-            font-size: 16px !important;
+            font-size: 14px !important;
         }
 
         th {
@@ -56,11 +57,6 @@
 
         .material-icons:hover {
             cursor: pointer;
-        }
-
-        .smallInput {
-            width: 105px;
-            padding: 5px;
         }
 
         textarea {
@@ -113,7 +109,7 @@
         }
 
         .employeeName {
-            width: 125px;
+            width: 130px;
             padding: 5px;
         }
 
@@ -157,7 +153,7 @@
         }
 
         .replys {
-            width: 70px;
+            width: 73px;
         }
 
         .editDelete {
@@ -166,6 +162,10 @@
 
         thead, tfoot, tbody {
             display: block;
+        }
+
+        .log{
+            width: 45px;
         }
 
         tbody {
@@ -188,11 +188,7 @@
         {{ session()->get('failed') }}
     </div>
 @endif
-<a 
-   href="{{url('all-logs')}}"
-   type="button" class="btn btn-danger">
-    <i class="material-icons">delete</i>
-</a>
+
 <div class="parent">
     <div class="container">
         <form method="get" action="{{url('insert')}} " enctype="multipart/form-data" id="form1"></form>
@@ -200,23 +196,28 @@
 
             <thead>
             <tr style=" background-color: lightgoldenrodyellow;">
-                <th class="date">log<i class="material-icons" onclick="sortTable(0)">arrow_drop_down</i>
+                <th style="padding: 1px 2px">
+                    <a
+                        href="{{url('all-logs')}}"
+                        type="button" class="btn btn-primary">
+                        <i class="material-icons">history</i>
+                    </a>
                 </th>
 
-                <th class="date">التاريخ<i class="material-icons" onclick="sortTable(0)">arrow_drop_down</i>
+                <th class="date">التاريخ<i class="material-icons" onclick="sortTable(1)">arrow_drop_down</i>
                 </th>
                 <th class="employeeName">
-                    اسم الموظف<i class="material-icons" onclick="sortTable(1)">arrow_drop_down</i>
+                    اسم الموظف<i class="material-icons" onclick="sortTable(2)">arrow_drop_down</i>
                 </th>
                 <th class="studentName">اسم/ايميل الطالب
-                    <i class="material-icons" onclick="sortTable(2)">arrow_drop_down</i>
+                    <i class="material-icons" onclick="sortTable(3)">arrow_drop_down</i>
                 </th>
                 <th class="phoneNumber">رقم الهاتف</th>
                 <th class="problem">المشكلة</th>
                 <th class="targetPerson">الشخص المعني<i class="material-icons"
-                                                        onclick="sortTable(5)">arrow_drop_down</i></th>
+                                                        onclick="sortTable(6)">arrow_drop_down</i></th>
                 <th class="notes2">ملاحظات</th>
-                <th class="status">الحالة<i class="material-icons" onclick="sortTable(7)">arrow_drop_down</i>
+                <th class="status">الحالة<i class="material-icons" onclick="sortTable(8)">arrow_drop_down</i>
                 </th>
 
                 <th class="replys">الردود</th>
@@ -229,15 +230,13 @@
             <tbody id="tbody">
             @foreach($data as $record)
                 <tr id="{{$record->id}}">
-                    <td>
+                    <td style="padding: 10px 2px">
                         <a
                            href="{{url('logfile/'.$record->id)}}"
-                           type="button" class="btn btn-danger">
-                            <i class="material-icons">delete</i>
+                           type="button" class="btn btn-default">
+                            <i class="fa fa-history"></i></button>
                         </a>
                     </td>
-
-
                     <td class="date">{{$record->created_at}}</td>
                     <td class="employeeName">{{$record->emp_name}}</td>
                     <td class="studentName">{{$record->student_name}}</td>
@@ -269,6 +268,9 @@
 
             <tfoot id="tfoot">
             <tr id="newRecord">
+                <td style="width: 45px">
+
+                </td>
                 <td class="date">
                     <input id="date" name="date" type="text" class="form-control" form="form1"
                            placeholder="التاريخ"
@@ -581,12 +583,11 @@
         idd = "#" + id + "";
         data = [];
         names = ['id', 'date', 'employeeName', 'studentName', 'phone', 'problem', 'targetPerson', 'notes', 'status'];
-        html = "<td style='display: none'>" +
+        html = "<td style='width: 50px'></td><td style='display: none'>" +
             "<input form='form2' name='" + names[0] + "' type='text' class='form-control' value='" + id + "'>" +
             "</td>";
         for (i = 1; i < $('#' + id).children().length - 2; i++) {
             cont = $('#' + id).children().get(i).textContent;
-            alert(cont);
             if (i === 8) {
                 html += '<td>' + '<select dir="rtl" name="status" form="form2" id="status" class="form-control">' +
                     '<option value="' + cont + '">' + cont + '</option>';

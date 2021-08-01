@@ -116,22 +116,20 @@
 
 <div class="container">
     <form method="get" action="{{url('insert')}} " enctype="multipart/form-data" id="form1"></form>
-    <table id="myTable" class="table table-bordered table-striped table-hover">
+    <table id="logTable" class="table table-bordered table-striped table-hover">
 
         <thead>
         <tr style=" background-color: lightgoldenrodyellow;">
-
             <th>التاريخ<i class="material-icons" onclick="sortTable(0)">arrow_drop_down</i></th>
             <th>تعديل بواسطة<i class="material-icons" onclick="sortTable(1)">arrow_drop_down</i></th>
-            <th>الوصف<i class="material-icons" onclick="sortTable(1)">arrow_drop_down</i></th>
-            <th>اسم/ايميل الطالب<i class="material-icons" onclick="sortTable(2)">arrow_drop_down</i></th>
-
-
+            <th>الوصف<i class="material-icons" onclick="sortTable(2)">arrow_drop_down</i></th>
+            <th>اسم/ايميل الطالب<i class="material-icons">arrow_drop_down</i></th>
             <th>رقم الهاتف</th>
             <th>المشكلة</th>
-            <th>الشخص المعني<i class="material-icons" onclick="sortTable(5)">arrow_drop_down</i></th>
+            <th>الشخص المعني<i class="material-icons" onclick="sortTable(6)">arrow_drop_down</i></th>
             <th>ملاحظات</th>
-            <th>الحالة<i class="material-icons" onclick="sortTable(7)">arrow_drop_down</i></th>
+            <th>الحالة<i class="material-icons" onclick="sortTable(8)">arrow_drop_down</i></th>
+            <th>الردود</th>
 
         </tr>
         </thead>
@@ -139,28 +137,22 @@
 
         @foreach($data as $key=>$record)
             <tr id="{{$record->id}}">
-
                 <td>{{$record->created_at}}</td>
                 <td>{{$record->modified_by}}</td>
                 <td>{{$record->description}}</td>
-
-                <td> {{$record->ticket_data[0]['student_name']}}</td>
-                <td> {{$record->ticket_data[0]['phone_no']}}</td>
-                <td> {{$record->ticket_data[0]['issue']}}</td>
-                <td> {{$record->ticket_data[0]['resp_emp']}}</td>
-                <td> {{$record->ticket_data[0]['notes']}}</td>
-                <td> {{$record->ticket_data[0]['status']}}</td>
-
+                <td>{{$record->ticket_data[0]['student_name']}}</td>
+                <td>{{$record->ticket_data[0]['phone_no']}}</td>
+                <td>{{$record->ticket_data[0]['issue']}}</td>
+                <td>{{$record->ticket_data[0]['resp_emp']}}</td>
+                <td>{{$record->ticket_data[0]['notes']}}</td>
+                <td>{{$record->ticket_data[0]['status']}}</td>
+                <td><button class="btn btn-default" data-toggle="modal" data-target="#replyModal"><i class="material-icons">reply</i></button></td>
             </tr>
         @endforeach
 
-
         </tbody>
     </table>
-
-
 </div>
-<button data-toggle="modal" data-target="#replyModal">get REPLYS</button>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="replyModal"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -194,28 +186,9 @@
                     </tbody>
                 </table>
 
-                <div class="row">
-                    <form id="replyForm" action="{{url('addreply')}}">
-                        <input name="ticket_id" type="text" id="getTicketId" style="display: none">
-                    </form>
-
-
-                    <div class="col-md-2">
-                        <button type="submit" form="replyForm" class="btn btn-success">اضافة</button>
-                    </div>
-                    <div class="col-md-8">
-                        <input class="form-control" form="replyForm" name="reply" id="newReply"
-                               placeholder="اكتب ردك">
-                        {{--                            <input name="ticket_id" value="{{$record->id}}" style="display: none">--}}
-                    </div>
-                    <div class="col-md-2">
-                        <label for="newReply">اضافة رد</label>
-                    </div>
-
-                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">الغاء</button>
+                <button class="btn btn-primary" data-dismiss="modal">موافق</button>
             </div>
         </div>
     </div>
@@ -224,166 +197,34 @@
 
 
 <script>
-    function getReplies(ticket_id) {
+    {{--function getReplies(ticket_id) {--}}
 
-        $("#replyBody").empty();
-        $.ajax({
-            url: '{{route('getreplies')}}',
-            data: {'tik_id': ticket_id},
-            type: 'get',
-            success: function (data) {
-                for (i = 0; i < data.length; i++) {
-
-
-                    $("#replyBody").append('<tr><td>' + data[i].created_at + '</td><td>' + data[i].emp_name + '</td><td>' + data[i].reply + '</td>');
-                }
+    {{--    $("#replyBody").empty();--}}
+    {{--    $.ajax({--}}
+    {{--        url: '{{route('getreplies')}}',--}}
+    {{--        data: {'tik_id': ticket_id},--}}
+    {{--        type: 'get',--}}
+    {{--        success: function (data) {--}}
+    {{--            for (i = 0; i < data.length; i++) {--}}
+    {{--                $("#replyBody").append('<tr><td>' + data[i].created_at + '</td><td>' + data[i].emp_name + '</td><td>' + data[i].reply + '</td>');--}}
+    {{--            }--}}
 
 
-                $("#replyModal").modal("show");
-                // $("getTicketId").setAttribute('value',ticket_id);
-                document.getElementById('getTicketId').setAttribute('value', ticket_id);
-            }
+    {{--            $("#replyModal").modal("show");--}}
+    {{--            // $("getTicketId").setAttribute('value',ticket_id);--}}
+    {{--            document.getElementById('getTicketId').setAttribute('value', ticket_id);--}}
+    {{--        }--}}
 
-        })
+    {{--    })--}}
 
-    }
+    {{--}--}}
 
-
-    $(document).ready(function () {
-
-        setTimeout(function () {
-            $('.tempAlert').remove();
-        }, 5000);
-        $('.statusColor').each(function () {
-            if ($(this).text() === "تم الحل") {
-                $(this).css("background-color", "#00ff00");
-                $(this).css("font-size", "15px");
-                $(this).css("font-weight", "bold");
-                $(this).css("text-align", "center");
-            } else if ($(this).text() === "قيد المتابعة") {
-                $(this).css("background-color", "#ffff00");
-                $(this).css("font-size", "15px");
-                $(this).css("font-weight", "bold");
-                $(this).css("text-align", "center");
-            } else if ($(this).text() === "لا يوجد حل") {
-                $(this).css("background-color", "#ff0000");
-                $(this).css("font-size", "15px");
-                $(this).css("font-weight", "bold");
-                $(this).css("text-align", "center");
-            } else if ($(this).text() === "متابعة من الدعم الفني") {
-                $(this).css("background-color", "#0073ff");
-                $(this).css("font-size", "15px");
-                $(this).css("font-weight", "bold");
-                $(this).css("text-align", "center");
-            } else {
-                $(this).css("background-color", "unset");
-                $(this).css("font-size", "15px");
-                $(this).css("font-weight", "bold");
-                $(this).css("text-align", "center");
-            }
-        });
-        // if($('.statusColor').childElementCount(0))
-
+    $( document ).ready(function() {
+        sortTable(0);
     });
-
-    targetpersonName = ["حسام", "ديمة", "شروق", "مجد"];
-    statusInfo = ["تم الحل", "قيد المتابعة", "لا يوجد حل", "متابعة من الدعم الفني"];
-
-    function edit(e, id, notes) {
-        tr = e.parentElement.parentElement.parentElement.children;
-        rowd = document.getElementById(id).outerHTML;
-
-        names = ['id', 'date', 'employeeName', 'studentName', 'phone', 'problem', 'targetPerson', 'notes', 'status', 'notes2'];
-        data = [];
-        html = "<td style='display: none'><input form='form2' name='" + names[0] + "' type='text' class='form-control' value='" + id + "'></td>";
-
-        for (i = 1; i < tr.length;) {
-            cont = tr[i].textContent;
-            data.push(tr[i].textContent);
-            names.shift();
-            if (names[i] === "employeeName") {
-                html += '<td>' +
-                    '<input value="' + cont + '" type="text" class="form-control smallInput" disabled>' +
-                    '<input value="' + cont + '" name="employeeName" form="form2" id="employeeName" type="text" ' +
-                    'class="form-control" ' +
-                    'placeholder="اسم الموظف" style="display: none">' +
-                    '</td>';
-            } else if (names[i] === "targetPerson") {
-                html += ' <td> ' +
-                    '<select dir="rtl" name="targetPerson" form="form2" id="targetPerson" class="form-control" style="width: 100px">' +
-
-                    '<option value="' + cont + '">' + cont + '</option>';
-                ////////// remove selected
-
-                const index = targetpersonName.indexOf(cont);
-                if (index > -1) {
-                    targetpersonName.splice(index, 1);
-                }
-                for (j = 0; j < targetpersonName.length; j++) {
-                    html += '<option value="' + targetpersonName[j] + '">' + targetpersonName[j] + '</option>';
-                }
-                html += '</select>' + '</td>';
-            } else if (names[i] === "status") {
-
-                html += ' <td> ' +
-                    '<select dir="rtl" name="status" form="form2" id="status" class="form-control" style="width: 100px">' +
-
-                    '<option value="' + cont + '">' + cont + '</option>';
-
-                ////////// remove selected
-                const indexs = statusInfo.indexOf(cont);
-                if (indexs > -1) {
-                    statusInfo.splice(indexs, 1);
-                }
-
-                for (j = 0; j < statusInfo.length; j++) {
-                    html += '<option value="' + statusInfo[j] + '">' + statusInfo[j] + '</option>';
-                }
-                html += '</select>' + '</td>';
-            } else if (names[i] === "notes") {
-                html += ' <td> ' +
-                    ' <textarea name="notes" form="form2" id="notes" class="form-control" ' +
-                    '  placeholder="ملاحظات">' + notes + '</textarea> ' +
-                    '</td>';
-            } else if (names[i] === "notes2") {
-                html += '<td>' +
-                    '<input value="الردود" type="text" class="form-control smallInput" disabled>' +
-                    '</td>';
-            } else {
-                html += "<td><input form='form2' name=" + names[i] + " type='text' class='form-control' value='" + cont + "'></td>";
-            }
-            tr[i].remove();
-            if (i == tr.length - 1)
-                tr[i].remove();
-        }
-        idd = "#" + id + "";
-        html += '<td><div style="display: flex"><button form="form2" type="submit" href="" class="btn btn-primary">موافق</button><button onclick="cancelEdit(idd,rowd)" class="btn btn-default">الغاء</button></div></td>';
-        $("#" + id + "").append(html);
-    }
-
-    function cancelEdit(idd, oldData) {
-        $(idd).empty();
-        idd = idd.replace('#', '');
-        oldData = oldData.replace('<tr id="' + idd + '">', '');
-        oldData = oldData.replace('</tr>', '');
-        $('#' + idd).append(oldData);
-    }
-
-    function submitAddForm() {
-        if ($('#studentName').val() === "") {
-            $('#modalTitle').html("خطأ");
-            $('#modalTitle').css("color", "red")
-            $('#modalBody').html("عليك اضافة اسم/ايميل الطالب")
-            $('#modalFoorter').html('<button type="button" class="btn btn-primary" data-dismiss="modal">موافق</button>');
-            $('#myModal').modal('show');
-        } else {
-            $('#form1').submit();
-        }
-    }
-
     function sortTable(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-        table = document.getElementById("myTable");
+        table = document.getElementById("logTable");
         switching = true;
         //Set the sorting direction to ascending:
         dir = "asc";
@@ -395,7 +236,7 @@
             rows = table.rows;
             /*Loop through all table rows (except the
             first, which contains table headers):*/
-            for (i = 1; i < (rows.length - 2); i++) {
+            for (i = 1; i < (rows.length - 1); i++) {
                 //start by saying there should be no switching:
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
@@ -436,17 +277,6 @@
         }
     }
 
-    function showNotes(notes) {
-        $('#modalTitle').html("الملاحظات");
-        if (notes === undefined) {
-            $('#modalBody').html("لا يوجد");
-        } else {
-            $('#modalBody').html(notes);
-        }
-
-        $('#modalFoorter').html('<button type="button" class="btn btn-primary" data-dismiss="modal">موافق</button>');
-        $('#myModal').modal('show');
-    }
 
 </script>
 </body>

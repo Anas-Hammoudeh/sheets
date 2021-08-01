@@ -13,7 +13,7 @@ use App\Http\Controllers\TicketCont;
 |
 */
 
-
+Route::get('new-design',function (){return view('newdesign');});
 Route::get('all-logs','App\Http\Controllers\LogCont@getAllLogs');
 Route::get('logfile/{id}','App\Http\Controllers\LogCont@getTicketLog');
 Route::get('addreply','App\Http\Controllers\ReplyCont@add');

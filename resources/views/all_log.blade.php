@@ -121,17 +121,15 @@
         <thead>
         <tr style=" background-color: lightgoldenrodyellow;">
 
-            <th>التاريخ<i class="material-icons" onclick="sortTable(0)">arrow_drop_down</i></th>
+            <th style="width: 116px">التاريخ<i class="material-icons" onclick="sortTable(0)">arrow_drop_down</i></th>
             <th>تعديل بواسطة<i class="material-icons" onclick="sortTable(1)">arrow_drop_down</i></th>
-            <th>الوصف<i class="material-icons" onclick="sortTable(1)">arrow_drop_down</i></th>
-            <th>اسم/ايميل الطالب<i class="material-icons" onclick="sortTable(2)">arrow_drop_down</i></th>
-
-
+            <th>الوصف<i class="material-icons" onclick="sortTable(2)">arrow_drop_down</i></th>
+            <th>اسم/ايميل الطالب<i class="material-icons" onclick="sortTable(3)">arrow_drop_down</i></th>
             <th>رقم الهاتف</th>
             <th>المشكلة</th>
-            <th>الشخص المعني<i class="material-icons" onclick="sortTable(5)">arrow_drop_down</i></th>
+            <th>الشخص المعني<i class="material-icons" onclick="sortTable(6)">arrow_drop_down</i></th>
             <th>ملاحظات</th>
-            <th>الحالة<i class="material-icons" onclick="sortTable(7)">arrow_drop_down</i></th>
+            <th>الحالة<i class="material-icons" onclick="sortTable(8)">arrow_drop_down</i></th>
             <th > الردود</th>
 
         </tr>
@@ -141,7 +139,7 @@
         @foreach($data as $record)
             <tr id="{{$record->id}}">
 
-                <td>{{$record->created_at}}</td>
+                <td style="width:116px">{{$record->created_at}}</td>
                 <td>{{$record->modified_by}}</td>
                 <td>{{$record->description}}</td>
 
@@ -151,7 +149,7 @@
                 <td> {{$record->ticket_data[0]['resp_emp']}}</td>
                 <td> {{$record->ticket_data[0]['notes']}}</td>
                 <td> {{$record->ticket_data[0]['status']}}</td>
-                <td onclick="getReplies({{$record->ticket_id}})"></td>
+                <td><button class="btn btn-default"  onclick="getReplies({{$record->ticket_id}})"><i class="material-icons">reply</i> </button> </td>
 
             </tr>
         @endforeach
@@ -218,7 +216,6 @@
 </div>
 <script>
     function getReplies(ticket_id) {
-        alert('iam here');
 
         $("#replyBody").empty();
         $.ajax({
@@ -230,7 +227,7 @@
                     var val = "" + data[i].created_at;
                     var date = new Date(val);
 
-                    $("#replyBody").append('<tr><td>' + date.toLocaleDateString() + '</td><td>' +date.toLocaleTimeString()+ '</td><td>' + data[i].reply + '</td>');
+                    $("#replyBody").append('<tr><td>' + date.toLocaleDateString() + '<br>' +date.toLocaleTimeString()+ '</td><td>'+data[i].emp_name+'</td><td>' + data[i].reply + '</td>');
                 }
 
 
@@ -390,7 +387,7 @@
             rows = table.rows;
             /*Loop through all table rows (except the
             first, which contains table headers):*/
-            for (i = 1; i < (rows.length - 2); i++) {
+            for (i = 1; i < (rows.length - 1); i++) {
                 //start by saying there should be no switching:
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
